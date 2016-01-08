@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'djcelery',
 
     'vocab',
     'entries',
@@ -124,3 +125,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# CELERY SETTINGS
+
+# BROKER_URL = 'redis://localhost:6379/0'
+# BROKER_URL = amqp://guest@localhost/
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+
+
+# WORDNIK API KEY
+WORDNIK_API_KEY = os.environ.get('WORDNIK_API_KEY')

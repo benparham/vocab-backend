@@ -11,7 +11,8 @@ class EntrySerializer(serializers.ModelSerializer):
             'id',
             'word',
             'definition',
-            'definition_source'
+            'definition_source',
+            'created_date'
         )
 
     def create(self, validated_data):

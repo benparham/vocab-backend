@@ -11,7 +11,8 @@ WORDNIK_URL = 'https://api.wordnik.com/v4/word.json/'
 @shared_task
 def wordnik_define(entry_id):
     if (settings.WORDNIK_API_KEY == None):
-        print('Wordnik api key not set')
+        raise Exception('Wordnik api key not set')
+        # print('Wordnik api key not set')
         return
 
     # Import within method to avoid circular/recursive import
@@ -29,4 +30,6 @@ def wordnik_define(entry_id):
         result = r.json()[0]
         entry.definition = result['text']
         entry.definition_source = result['sourceDictionary']
+
     entry.save()
+    return entry

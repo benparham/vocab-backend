@@ -8,9 +8,10 @@ class EntryManager(models.Manager):
         entry = Entry(**validated_data)
         entry.save()
 
-        wordnik_define.delay(entry.id)
+        # wordnik_define.delay(entry.id)
+        # return entry
 
-        return entry
+        return wordnik_define(entry.id)
 
 class Entry(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='entries')

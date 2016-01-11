@@ -18,6 +18,5 @@ class EntrySerializer(serializers.ModelSerializer):
         request = self.context.get('request', None)
         if not request:
             raise InternalError
-        print ('Adding owner to validated data in serializer...')
         validated_data['owner'] = request.user
         return Entry.objects.create(**validated_data)

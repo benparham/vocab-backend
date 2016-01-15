@@ -8,6 +8,7 @@ class DefinitionSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'text',
+            'part_of_speech',
             'source',
             'rank'
         )

@@ -9,6 +9,8 @@ import requests
 WORDNIK_URL = 'https://api.wordnik.com/v4/word.json/'
 MAX_DEFINITIONS = 3
 
+
+# TODO: useCanonical will turn things like cats -> cat (part of wordnik API)
 @shared_task
 def wordnik_define(entry_id):
     if (settings.WORDNIK_API_KEY == None):
@@ -32,6 +34,7 @@ def wordnik_define(entry_id):
 
             definition = Definition(entry=entry)
             definition.text = result['text']
+            definition.part_of_speech = result['partOfSpeech']
             definition.source = result['sourceDictionary']
             definition.rank = i + 1
 

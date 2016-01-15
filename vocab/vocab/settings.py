@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     'vocab',
     'entries',
+    'definitions',
 ]
 
 MIDDLEWARE_CLASSES = [

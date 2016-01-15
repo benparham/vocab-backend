@@ -7,16 +7,17 @@ from django.conf import settings
 import requests
 
 WORDNIK_URL = 'https://api.wordnik.com/v4/word.json/'
+MAX_DEFINITIONS = 3
 
 @shared_task
 def wordnik_define(entry_id):
     if (settings.WORDNIK_API_KEY == None):
         raise Exception('Wordnik api key not set')
-        # print('Wordnik api key not set')
         return
 
     # Import within method to avoid circular/recursive import
     from entries.models import Entry
+    from definitions.models import Definition
     entry = Entry.objects.get(id=entry_id)
 
     r = requests.get(
@@ -24,12 +25,14 @@ def wordnik_define(entry_id):
             params={'api_key': settings.WORDNIK_API_KEY}
         )
 
-    if (r.status_code != 200):
-        entry.definition = 'Definition not found'
-    else:
-        result = r.json()[0]
-        entry.definition = result['text']
-        entry.definition_source = result['sourceDictionary']
+    if (r.status_code == 200):
+        results = r.json()
+        for i in range(0, min(MAX_DEFINITIONS, len(results))):
+            result = results[i]
 
-    entry.save()
-    return entry
+            definition = Definition(entry=entry)
+            definition.text = result['text']
+            definition.source = result['sourceDictionary']
+            definition.rank = i + 1
+
+            definition.save()

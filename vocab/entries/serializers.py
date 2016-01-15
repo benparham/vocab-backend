@@ -3,15 +3,17 @@ from rest_framework import serializers
 from vocab.exceptions import InternalError
 
 from entries.models import Entry
+from definitions.serializers import DefinitionSerializer
 
 class EntrySerializer(serializers.ModelSerializer):
+    definitions = DefinitionSerializer(many=True, read_only=True)
+
     class Meta:
         model = Entry
         fields = (
             'id',
             'word',
-            'definition',
-            'definition_source',
+            'definitions',
             'created_date'
         )
 
